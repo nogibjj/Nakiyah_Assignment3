@@ -12,9 +12,7 @@ def readData(df):
 # Function 2
 def summaryStatistics(df, Col):
     df = df[Col]
-    df = df.with_columns(pl.col(Col).cast(pl.Float64, strict=False))
     SumStats = df.describe()
-    SumStats = SumStats.filter(pl.col("statistic").is_in(["mean", "std", "min", "25%", "50%", "75%", "max"]))
     return SumStats
 
 # Function 3
