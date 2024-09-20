@@ -19,3 +19,4 @@ generate_and_push:
 	git add .
 	git commit -m "Add generated plot and report"
 	git push
+
