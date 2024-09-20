@@ -65,5 +65,6 @@ def tripleBarPlot(df, Col, RankCols):
     )
     plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
     plt.tight_layout()
-    plt.show()
+    #plt.show()
+    plt.savefig("University_Rank_Comparison")
     return "Chart"

@@ -20,6 +20,23 @@ SummaryStatistics, Median, Mean = summaryStatistics(
 )
 print(SummaryStatistics)
 
+def save_to_markdown(df, col):
+    """save summary report to markdown"""
+    markdown_table1, markdown_table2, markdown_table3 = summaryStatistics(df, col)
+    markdown_table1 = str(markdown_table1)
+    markdown_table2 = str(markdown_table2)
+    markdown_table3 = str(markdown_table3)
+    # Write the markdown table to a file
+    with open("summary_report_generated.md", "w", encoding="utf-8") as file:
+        file.write("Describe:\n")
+        file.write(markdown_table1)
+        file.write("\n\n")  # Add a new line
+        file.write("Median:\n")
+        file.write(markdown_table2)
+        file.write("\n\n")  # Add a new line
+        file.write("Mean:\n")
+        file.write(markdown_table3)
+        file.write("\n\n")  # Add a new line
 
 ColumnsForDataset = [
     "#",
@@ -41,3 +58,5 @@ CleanData = cleanData(ReadData, Rank, ColumnsForDataset, requiredrank)
 piePlotStudents = PiePlot(CleanData, PctIntlStudents, SchoolName)
 piePlotFaculty = PiePlot(CleanData, PctIntlFaculty, SchoolName)
 BarChart = tripleBarPlot(CleanData, SchoolName, RankNames)
+
+save_to_markdown(ReadData, ColumnsWantedForSummaryStats)
