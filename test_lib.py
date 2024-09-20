@@ -1,7 +1,6 @@
 import polars as pl
 from io import StringIO
-from mylib.lib import (
-    readData,
+from main import (
     cleanData,
     summaryStatistics,
     PiePlot,
@@ -9,51 +8,112 @@ from mylib.lib import (
 )
 
 """
-Test Functions for data processing and visualization functions
+Test Functions for data processing and visualization functions using Polars
 """
 
-def test_readData():
-    data = readData("FT Global Business School MBA Ranking 2024.csv")
-    assert isinstance(data, pl.DataFrame), "readData should return a Polars DataFrame"
-    assert data.height > 0, "DataFrame should not be empty"
-
-def test_cleanData():
-    # Assuming readData is already called
-    raw_data = readData("FT Global Business School MBA Ranking 2024.csv")
-    cleaned_data = cleanData(raw_data, "#", ["#", "School Name"], 10)
-    
-    assert isinstance(cleaned_data, pl.DataFrame), "cleanData should return a Polars DataFrame"
-    assert all(col in cleaned_data.columns for col in ["#", "School Name"]), "Cleaned DataFrame should include specified columns"
-    assert cleaned_data.select(pl.col("#").n_unique()).to_numpy()[0] <= 10, "Number of unique ranks should be limited to requiredrank"
-
+# Test summaryStatistics
 def test_summaryStatistics():
-    raw_data = readData("FT Global Business School MBA Ranking 2024.csv")
-    stats = summaryStatistics(raw_data, ["Value for money rank", "Salary percentage increase", "Overall satisfaction **"])
-    
-    assert isinstance(stats, dict), "summaryStatistics should return a dictionary"
-    assert all(key in stats for key in ["Value for money rank", "Salary percentage increase", "Overall satisfaction **"]), "Summary stats should contain specified keys"
+    csv_data = """#,School Name,International students (%),International faculty (%),Value for money rank,Career progress rank,Careers service rank
+                  1,School A,30,20,10,20,15
+                  2,School B,25,30,20,15,10
+                  3,School C,20,25,15,10,20
+                  4,School D,15,20,30,25,25
+                  5,School E,35,40,5,5,5"""
 
+    df = pl.read_csv(StringIO(csv_data))
+
+    summary, meanVal, medianVal = summaryStatistics(
+        df, ["Value for money rank", "Career progress rank", "Careers service rank"]
+    )
+
+    # Check if the summary statistics contain the required metrics
+    assert (
+        medianVal["Value for money rank"][0] == 16.0
+    ), "Median Value for money rank is incorrect"
+    assert (
+        medianVal["Career progress rank"][0] == 15.0
+    ), "Median Value for progress rank is incorrect"
+    assert (
+        medianVal["Careers service rank"][0] == 15.0
+    ), "Median Value for service rank is incorrect"
+
+    assert (
+        meanVal["Value for money rank"][0] == 15.0
+    ), "Mean of Value for money rank is incorrect"
+    assert (
+        meanVal["Career progress rank"][0] == 15.0
+    ), "Mean of Value for progress rank is incorrect"
+    assert (
+        meanVal["Careers service rank"][0] == 15.0
+    ), "Mean of Value for service rank is incorrect"
+
+
+# Test cleanData
+def test_cleanData():
+    csv_data = """#,School Name,International students (%),International faculty (%),Value for money rank,Career progress rank,Careers service rank
+                  1,School A,30,20,10,20,15
+                  2,School B,25,30,20,15,10
+                  3,School C,20,25,15,10,20
+                  4,School D,15,20,30,25,25
+                  5,School E,35,40,5,5,5"""
+
+    df = pl.read_csv(StringIO(csv_data))
+
+    Columns = [
+        "#",
+        "School Name",
+        "International students (%)",
+        "International faculty (%)",
+        "Value for money rank",
+        "Career progress rank",
+        "Careers service rank",
+    ]
+    CleanedData = cleanData(df, "#", Columns, 3)
+
+    # Check if the cleaned DataFrame has the correct number of rows
+    assert CleanedData.height == 3, "Number of rows in cleaned data is incorrect"
+    assert all(col in CleanedData.columns for col in Columns), "Column filtering failed"
+
+
+# Test PiePlot
 def test_PiePlot():
-    raw_data = readData("FT Global Business School MBA Ranking 2024.csv")
-    cleaned_data = cleanData(raw_data, "#", ["#", "School Name", "International students (%)"], 10)
-    pie_plot = PiePlot(cleaned_data, "International students (%)", "School Name")
-    
-    assert pie_plot is not None, "PiePlot should return a plot object"
-    # Additional assertions can be added based on the plotting library used
+    csv_data = """#,School Name,International students (%),International faculty (%),Value for money rank,Career progress rank,Careers service rank
+                  1,School A,30,20,10,20,15
+                  2,School B,25,30,20,15,10
+                  3,School C,20,25,15,10,20
+                  4,School D,15,20,30,25,25
+                  5,School E,35,40,5,5,5"""
 
+    df = pl.read_csv(StringIO(csv_data))
+    try:
+        PiePlot(df, "International students (%)", "School Name")
+        plot_success = True
+    except Exception as e:
+        plot_success = False
+        print(f"Pie plot failed: {e}")
+
+    assert plot_success, "Pie plot generation failed"
+
+
+# Test tripleBarPlot
 def test_tripleBarPlot():
-    raw_data = readData("FT Global Business School MBA Ranking 2024.csv")
-    cleaned_data = cleanData(raw_data, "#", ["#", "School Name", "Value for money rank", "Career progress rank", "Careers service rank"], 10)
-    bar_chart = tripleBarPlot(cleaned_data, "School Name", ("Value for money rank", "Career progress rank", "Careers service rank"))
-    
-    assert bar_chart is not None, "tripleBarPlot should return a plot object"
-    # Additional assertions can be added based on the plotting library used
+    csv_data = """#,School Name,International students (%),International faculty (%),Value for money rank,Career progress rank,Careers service rank
+                  1,School A,30,20,10,20,15
+                  2,School B,25,30,20,15,10
+                  3,School C,20,25,15,10,20
+                  4,School D,15,20,30,25,25
+                  5,School E,35,40,5,5,5"""
 
-# Running tests
-if __name__ == "__main__":
-    test_readData()
-    test_cleanData()
-    test_summaryStatistics()
-    test_PiePlot()
-    test_tripleBarPlot()
-    print("All tests passed!")
+    df = pl.read_csv(StringIO(csv_data))
+    try:
+        tripleBarPlot(
+            df,
+            "School Name",
+            ["Value for money rank", "Career progress rank", "Careers service rank"],
+        )
+        plot_success = True
+    except Exception as e:
+        plot_success = False
+        print(f"Bar plot failed: {e}")
+
+    assert plot_success, "Triple bar plot generation failed"

@@ -15,7 +15,9 @@ ColumnsWantedForSummaryStats = [
     "Salary percentage increase",
     "Overall satisfaction **",
 ]
-SummaryStatistics = summaryStatistics(ReadData, ColumnsWantedForSummaryStats)
+SummaryStatistics, Median, Mean = summaryStatistics(
+    ReadData, ColumnsWantedForSummaryStats
+)
 print(SummaryStatistics)
 
 

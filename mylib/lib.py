@@ -13,12 +13,14 @@ def readData(df):
 def summaryStatistics(df, Col):
     df = df[Col]
     SumStats = df.describe()
-    return SumStats
+    Median = df.median()
+    Mean = df.mean()
+    return SumStats, Median, Mean
 
 # Function 3
 def cleanData(df, ColToSort, Columns, RanksRequired):
-    df = df.with_columns(pl.col(ColToSort).cast(pl.Float64, strict=False))
-    df1 = df.sort(by=ColToSort).drop_nulls(subset=[ColToSort])
+    df = df.with_columns(pl.col(ColToSort))
+    df1 = df.sort(by=ColToSort)
     df1 = df1.select(Columns).head(RanksRequired)
     
     return df1
