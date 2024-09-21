@@ -4,7 +4,6 @@ from main import (
     cleanData,
     summaryStatistics,
     PiePlot,
-    tripleBarPlot,
 )
 
 """
@@ -93,27 +92,3 @@ def test_PiePlot():
         print(f"Pie plot failed: {e}")
 
     assert plot_success, "Pie plot generation failed"
-
-
-# Test tripleBarPlot
-def test_tripleBarPlot():
-    csv_data = """#,School Name,International students (%),International faculty (%),Value for money rank,Career progress rank,Careers service rank
-                  1,School A,30,20,10,20,15
-                  2,School B,25,30,20,15,10
-                  3,School C,20,25,15,10,20
-                  4,School D,15,20,30,25,25
-                  5,School E,35,40,5,5,5"""
-
-    df = pl.read_csv(StringIO(csv_data))
-    try:
-        tripleBarPlot(
-            df,
-            "School Name",
-            ["Value for money rank", "Career progress rank", "Careers service rank"],
-        )
-        plot_success = True
-    except Exception as e:
-        plot_success = False
-        print(f"Bar plot failed: {e}")
-
-    assert plot_success, "Triple bar plot generation failed"

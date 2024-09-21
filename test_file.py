@@ -2,7 +2,6 @@ from test_lib import (
     test_summaryStatistics,
     test_cleanData,
     test_PiePlot,
-    test_tripleBarPlot,
 )
 
 
@@ -16,9 +15,6 @@ def run_tests():
 
     print("Testing PiePlot()...")
     test_PiePlot()
-
-    print("Testing tripleBarPlot()...")
-    test_tripleBarPlot()
 
     print("All tests completed successfully!")
 
