@@ -32,7 +32,7 @@ def PiePlot(df, col, labels_col):
     labels = data[labels_col].to_list()
     
     # Plot the pie chart
-    plt.figure(figsize=(12, 12))
+    plt.figure(figsize=(8, 8))
     plt.pie(values, labels=labels, autopct="%1.1f%%", startangle=90, labeldistance=1.05)
     plt.title(f"Breakdown of {col} by School", pad=40)
     plt.axis("equal")
