@@ -58,3 +58,5 @@ piePlotStudents = PiePlot(CleanData, PctIntlStudents, SchoolName)
 piePlotFaculty = PiePlot(CleanData, PctIntlFaculty, SchoolName)
 
 save_to_markdown(ReadData, ColumnsWantedForSummaryStats)
+
+
