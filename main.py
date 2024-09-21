@@ -19,6 +19,7 @@ SummaryStatistics, Median, Mean = summaryStatistics(
 )
 print(SummaryStatistics)
 
+
 def save_to_markdown(df, col):
     """save summary report to markdown"""
     markdown_table1, markdown_table2, markdown_table3 = summaryStatistics(df, col)
@@ -36,6 +37,7 @@ def save_to_markdown(df, col):
         file.write("Mean:\n")
         file.write(markdown_table3)
         file.write("\n\n")  # Add a new line
+
 
 ColumnsForDataset = [
     "#",
@@ -57,5 +59,3 @@ CleanData = cleanData(ReadData, Rank, ColumnsForDataset, requiredrank)
 piePlotStudents = PiePlot(CleanData, PctIntlStudents, SchoolName)
 piePlotFaculty = PiePlot(CleanData, PctIntlFaculty, SchoolName)
 save_to_markdown(ReadData, ColumnsWantedForSummaryStats)
-
-
