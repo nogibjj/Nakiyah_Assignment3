@@ -56,7 +56,6 @@ RankNames = "Value for money rank", "Career progress rank", "Careers service ran
 CleanData = cleanData(ReadData, Rank, ColumnsForDataset, requiredrank)
 piePlotStudents = PiePlot(CleanData, PctIntlStudents, SchoolName)
 piePlotFaculty = PiePlot(CleanData, PctIntlFaculty, SchoolName)
-
 save_to_markdown(ReadData, ColumnsWantedForSummaryStats)
 
 
